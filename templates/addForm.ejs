@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Add Pokemon to Pokedex</h2>
+    <form method="POST" action="<%= actionURL %>">
+        <input name="name" placeholder="Name" required>
+        <input name="type" placeholder="Type" required>
+        <input name="level" type="number" placeholder="Level" required>
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>

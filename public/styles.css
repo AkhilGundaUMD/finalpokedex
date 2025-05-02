@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.press-start-2p-regular {
+    font-style: normal;
+    font-weight: 400;
+    font-family: "Press Start 2P", system-ui;
+}
+
+body {
+    color: blue;
+    background: yellow;
+    padding: 21px 0;
+    font-size: 15px;
+    font-family: "Press Start 2P", cursive;
+}
+
+.pokedex-table {
+    width: 100%;
+    margin: 21px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.pokedex-table td, 
+.pokedex-table th {
+    padding: 8px 10px;
+    border: 2px solid red;
+    text-align: start;
+}
+
+nav a {
+    margin: 10px 0;
+    display: block;
+    text-decoration: none;
+    color: green;
+}
+
+input, 
+button {
+    padding: 8px;
+    margin: 5px;
+    font-family: inherit;
+    background-color: yellow;
+    border-radius: 4px;
+    border: 1px solid blue;
+}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>Pokemon Found!</h2>
+    <% if (sprite) { %>
+        <img src="<%= sprite %>" alt="<%= name %> sprite">
+        <p>Here's <%= name %>!</p>
+    <% } %>
+    <a href="<%= localhostURL %>/api">Search Again</a><br>
+    <a href="<%= localhostURL %>">Home</a>
+</body>
+</html>

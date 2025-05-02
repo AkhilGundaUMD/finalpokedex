@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: pokedex
+    runtime: node
+    buildCommand: npm install
+    startCommand: node pokedexServer.js
+    envVars:
+      - key: MONGO_CONNECTION_STRING
+        value: mongodb+srv://skhilgunda:LBJ@cluster0.4zgarst.mongodb.net/CRSC335DB?retryWrites=true&w=majority&appName=Cluster0
+      - key: MONGO_DB_NAME
+        value: CRSC335DB
+      - key: MONGO_COLLECTION
+        value: campApplicants
+      - key: PORT
+        value: 10000
+    plan: free
