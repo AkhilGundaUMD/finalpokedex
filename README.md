@@ -4,3 +4,4 @@ App Description: Allows users to add pokemon to pokedex (database), retrieve pok
 Youtube Video Link: https://youtu.be/os0sgw_4aSM
 APIs:  Pokémon Sprites API: https://pokeapi.co/
 Contact Email: agunda@terpmail.umd.edu
+Deployed on Render: https://finalpokedex.onrender.com
