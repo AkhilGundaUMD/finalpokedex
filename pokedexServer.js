@@ -33,13 +33,13 @@ const dbSettings = {
   collection: process.env.MONGO_COLLECTION,
 };
 
-if (process.argv.length !== 3) {
-  console.error("Usage: pokedexServer.js portNumber");
-  process.exit(1);
-}
+// if (process.argv.length !== 3) {
+//   console.error("Usage: pokedexServer.js portNumber");
+//   process.exit(1);
+// }
 
-const port = process.argv[2];
-const baseUrl = `http://localhost:${port}`;
+const port = process.env.PORT || process.argv[2];
+const baseUrl = `http://0.0.0.0:${port}`;
 
 const app = express();
 const server = http.createServer(app);
@@ -133,7 +133,7 @@ router.post("/processApi", (req, res) => {
     });
 });
 
-server.listen(port, (error) => {
+server.listen(port, '0.0.0.0', (error) => {
   if (error) {
     console.error("Server startup failed");
   } else {
