@@ -28,18 +28,7 @@ mongoClient.connect()
     process.exit(1);
   });
 
-const dbSettings = {
-  db: process.env.MONGO_DB_NAME,
-  collection: process.env.MONGO_COLLECTION,
-};
-
-// if (process.argv.length !== 3) {
-//   console.error("Usage: pokedexServer.js portNumber");
-//   process.exit(1);
-// }
-
-const port = process.env.PORT || process.argv[2];
-const baseUrl = `http://0.0.0.0:${port}`;
+const port = process.env.PORT || 3000;
 
 const app = express();
 const server = http.createServer(app);
@@ -58,11 +47,11 @@ app.use((req, res, next) => {
 app.use("/", router);
 
 router.get("/", (req, res) => {
-  res.render("index", { localhostURL: baseUrl });
+  res.render("index");
 });
 
 router.get("/add", (req, res) => {
-  res.render("addForm", { actionURL: baseUrl + "/processAdd" });
+  res.render("addForm");
 });
 
 router.post("/processAdd", (req, res) => {
@@ -74,10 +63,7 @@ router.post("/processAdd", (req, res) => {
   };
 
   req.storage.insertOne(entry)
-    .then(() => res.render("processAdd", {
-      ...entry,
-      localhostURL: baseUrl
-    }))
+    .then(() => res.render("processAdd", entry))
     .catch(err => {
       console.error("Insert error:", err);
       res.status(500).send("Data storage failure");
@@ -85,20 +71,14 @@ router.post("/processAdd", (req, res) => {
 });
 
 router.get("/retrieve", (req, res) => {
-  res.render("retrieveForm", { 
-    actionURL: baseUrl + "/processRetrieve",
-    localhostURL: baseUrl 
-  });
+  res.render("retrieveForm");
 });
 
 router.post("/processRetrieve", (req, res) => {
   req.storage.find({}).toArray()
     .then(results => {
       const tableHTML = generateTable(results);
-      res.render("processRetrieve", {
-        tableContent: tableHTML,
-        localhostURL: baseUrl
-      });
+      res.render("processRetrieve", { tableContent: tableHTML });
     })
     .catch(err => {
       console.error("Query error:", err);
@@ -107,40 +87,26 @@ router.post("/processRetrieve", (req, res) => {
 });
 
 router.get("/api", (req, res) => {
-  res.render("apiForm", { actionURL: baseUrl + "/processAPI" });
+  res.render("apiForm");
 });
 
-router.post("/processAPI", (req, res) => {
-  const searchName = req.body.name.toLowerCase().trim();
-  fetch(`https://pokeapi.co/api/v2/pokemon/${searchName}`)
-    .then(response => {
-      if (!response.ok) throw new Error("No matching Pokémon found");
-      return response.json();
-    })
-    .then(pokeData => {
-      res.render("processAPI", {
-        sprite: pokeData.sprites.front_default,
-        name: searchName,
-        localhostURL: baseUrl
-      });
-    })
-    .catch(err => {
-      console.error("API error:", err);
-      res.status(404).render("apiError", {
-        error: err.message,
-        localhostURL: baseUrl
-      });
-    });
-});
-
-server.listen(port, '0.0.0.0', (error) => {
-  if (error) {
-    console.error("Server startup failed");
-  } else {
-    console.log(`Server active at ${baseUrl}`);
-    console.log("Type 'stop' to shutdown:");
-    process.stdin.on("readable", () => handleTermination(mongoClient));
+router.post("/processAPI", async (req, res) => {
+  try {
+    const name = req.body.name.trim().toLowerCase();
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    if (!response.ok) throw new Error("No matching Pokémon found");
+    const data = await response.json();
+    res.render("processAPI", { sprite: data.sprites.front_default, name });
+  } catch (err) {
+    console.error("API error:", err);
+    res.status(404).render("apiError", { error: err.message });
   }
+});
+
+server.listen(port, () => {
+  console.log(`Server active at http://localhost:${port}`);
+  console.log("Type 'stop' to shutdown:");
+  process.stdin.on("readable", () => handleTermination(mongoClient));
 });
 
 function handleTermination(dbClient) {
@@ -155,7 +121,7 @@ function handleTermination(dbClient) {
 
 function generateTable(entries) {
   if (!entries.length) return "<p>No Pokémon entries available</p>";
-  
+
   let table = `
     <table class="pokedex-table">
       <tr>
@@ -164,7 +130,7 @@ function generateTable(entries) {
         <th>Level</th>
         <th>Date Added</th>
       </tr>`;
-  
+
   entries.forEach(entry => {
     table += `
       <tr>
@@ -174,6 +140,6 @@ function generateTable(entries) {
         <td>${entry.dateAdded}</td>
       </tr>`;
   });
-  
+
   return table + "</table>";
 }
