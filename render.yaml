@@ -2,6 +2,7 @@ services:
   - type: web
     name: pokedex
     runtime: node
+    rootDir: .
     buildCommand: npm install
     startCommand: node pokedexServer.js
     envVars:
