@@ -107,10 +107,10 @@ router.post("/processRetrieve", (req, res) => {
 });
 
 router.get("/api", (req, res) => {
-  res.render("apiForm", { actionURL: baseUrl + "/processApi" });
+  res.render("apiForm", { actionURL: baseUrl + "/processAPI" });
 });
 
-router.post("/processApi", (req, res) => {
+router.post("/processAPI", (req, res) => {
   const searchName = req.body.name.toLowerCase().trim();
   fetch(`https://pokeapi.co/api/v2/pokemon/${searchName}`)
     .then(response => {
@@ -118,7 +118,7 @@ router.post("/processApi", (req, res) => {
       return response.json();
     })
     .then(pokeData => {
-      res.render("processApi", {
+      res.render("processAPI", {
         sprite: pokeData.sprites.front_default,
         name: searchName,
         localhostURL: baseUrl
